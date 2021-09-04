@@ -1,0 +1,395 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Hafalan {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+        <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-info">
+                  <h3 class="card-title">Muroja'ah Hafalan Per Ayat</h3>
+                </div>
+                <div class="card-body">
+                  <div style="margin-top: 3%;">
+                    <form>
+                      <div class="row" style="margin-left: 0%;">
+                        <div class="col-md-1">
+                        </div>
+
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label class="text-center" style="font-size: 12px">Nama Surat</label>
+                            <select id="surat_selection" class="form-control text-center" style="width: 230px; font-size: 16px;"></select>
+                          </div>
+                        </div>
+                        <div class="col-md-2" style="margin-left: 10%;">
+                          <div class="form-group">
+                            <label class="text-center" style="font-size: 12px">Mulai Ayat</label>
+                            <select id="start_ayat_selection" class="form-control text-center" style="width: 50px; font-size: 16px;"></select>
+                          </div>
+                        </div>
+                        <div class="col-md-2" style="margin-left: -5%;">
+                          <div class="form-group">
+                            <label class="text-center" style="font-size: 12px">Sampai Ayat</label>
+                            <select id="end_ayat_selection" class="form-control text-center" style="width: 50px; font-size: 16px;"></select>
+                          </div>
+                        </div>
+
+                      </div>
+                    </form>
+                    <div style="margin-top: -5%; margin-left: 50%;">
+                      <div class="col-12 col-lg-2 d-flex" style="margin-top: -4.8%; margin-left: 47.5%;">
+                        <button id="acak" type="button" rel="tooltip" class="btn btn-info btn-round">
+                          <i class="material-icons">swap_horiz</i>Acak</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12" style="margin-top: -3%;">
+              <div class="card">
+
+                <div class="card-header d-none d-lg-block d-xl-block">
+                  <div class="card-header d-flex align-items-center justify-content-center">
+                    <div class="btn-group flex-wrap" role="group" aria-label="Basic example">
+                      <button type="button"  rel="tooltip" class="previous btn btn-default btn-round"><i class="material-icons">west</i></button>
+                      <button type="button"  rel="tooltip" class="rekam btn btn-success btn-round"><i class="icon-rekam material-icons">mic_none</i> Rekam</button>
+                      <button type="button"  rel="tooltip" class="next btn btn-default btn-round"><i class="material-icons">east</i></button>
+                    </div>
+                  </div>
+                  <div data-role="recordings"></div>
+                </div>
+
+
+
+                <div class="card-header">
+                  <div>
+                    <button id="ulangi" type="button" rel="tooltip" class="btn btn-primary btn-round" style="float: right; margin-right: 3%; display: none;">
+                      <i class="material-icons">cached</i> Ulangi</button>
+                  </div>
+                </div>
+
+                <div class="card-body row">
+                  <div class="col col-lg-12 col-12 d-flex align-items-center justify-content-center">
+                    <p class="arabic-text" id="teks_ayat"></p>
+                  </div>
+                  <div class="col col-lg-12 col-12 d-flex align-items-center justify-content-center" id="typography">
+                    <div class="row">
+                      <div class="tim-typo" style="margin-left: 10%; margin-right: 5%;">
+                        <p id="arti"></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="margin-right: 5%; margin-top: -3%; margin-bottom: 5%;">
+                    <p class="target" dir="rtl" style="color:#2e4053; font-size:16px;" align="right"></p>
+                    <p class="target" dir="rtl" lang="ar" style="color:#2e4053; font-size:35px; line-height:2;" align="right"></p>
+                </div>
+                <div style="margin-right: 5%; margin-top: -1%; margin-bottom: 5%;">
+                    <p class="prediction" dir="rtl" style="color:#2e4053; font-size:16px;" align="right"></p>
+                    <p class="prediction" dir="rtl" lang="ar" style="color:#2e4053; font-size:35px; line-height:2;" align="right"></p>
+                </div>
+
+<!--                 <div class="card-body row">
+                  <div class="col col-lg-12 col-12 d-flex align-items-center justify-content-center">
+                    <p class="arabic-text" id="teks_ayat"></p>
+                  </div>
+                  <div class="col col-lg-12 col-12 d-flex align-items-center justify-content-center" id="typography">
+                    <div class="row">
+                      <div class="tim-typo" style="margin-left: 10%; margin-right: 5%;">
+                        <p id="arti"></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-header">
+                  <div>
+                    <button id="ulangi" type="button" rel="tooltip" class="btn btn-primary btn-round" style="float: right; margin-right: 3%; display: none;">
+                      <i class="material-icons">cached</i> Ulangi</button>
+                  </div>
+                </div>
+                <div style="margin-right: 5%; margin-top: 0%; margin-bottom: 5%;">
+                    <p class="target" dir="rtl" style="color:#2e4053; font-size:16px;" align="right"></p>
+                    <p class="target" dir="rtl" lang="ar" style="color:#2e4053; font-size:26px; line-height:2;" align="right"></p>
+                </div>
+              </div> -->
+
+
+
+            </div>
+
+        </div>
+
+
+
+{% endblock content %}
+
+
+
+
+
+
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="/static/assets/js/recorder.js"></script>
+<script src="/static/assets/js/get_wav.js"></script>
+<script>
+$.getJSON("{% url 'metadata_ayatQuranSimpleAll' %}", function(data) {window.quran_dict = data});
+// random int generator
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max) + 1;
+    return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+}
+// set ayat selection
+function set_start_ayat() {
+    // reset DOM
+    let element = document.getElementById("start_ayat_selection");
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    };
+    var start = document.getElementById('start_ayat_selection');
+    no_surat = parseInt(document.getElementById("surat_selection").value.split('.')[0]);
+    for ( i=1; i<=max_ayat[no_surat]; i++ ) {
+        newopt = document.createElement('option');
+        newopt.value = i;
+        newopt.innerHTML = i;
+        newopt.style="font-size: 16px";
+        start.appendChild(newopt);
+    }
+};
+function set_end_ayat() {
+    // reset DOM
+    let element = document.getElementById("end_ayat_selection");
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    };
+    var start = document.getElementById('end_ayat_selection');
+    no_surat = parseInt(document.getElementById("surat_selection").value.split('.')[0]);
+    start_ayat = document.getElementById("start_ayat_selection").value;
+    for ( i=start_ayat; i<=max_ayat[no_surat]; i++ ) {
+        newopt = document.createElement('option');
+        newopt.value = i;
+        newopt.innerHTML = i;
+        newopt.style="font-size: 16px";
+        start.appendChild(newopt);
+    }
+};
+// get random ayat
+$( "#acak" ).click(function() {
+    ret = reset();
+    no_surat = parseInt(ret[0]);
+    start = document.getElementById("start_ayat_selection").value;
+    end = document.getElementById("end_ayat_selection").value;
+    ayat = getRandomInt(start, end);
+    document.getElementById("teks_ayat").innerHTML = 'QS ' + no_surat + ' : ' + ayat;
+});
+// get required data and initiate state
+$.getJSON("{% url 'metadata_listSurat' %}", function(data) {
+    window.list_nama_surat = data;
+    // set surat selection
+    var start = document.getElementById('surat_selection');
+    for ( i=1; i<=114; i++ ) {
+        surat = list_nama_surat[i];
+        newopt = document.createElement('option');
+        newopt.value = surat;
+        newopt.innerHTML = surat;
+        newopt.style="font-size: 16px";
+        start.appendChild(newopt);
+    }
+    $.getJSON("{% url 'metadata_maxAyat' %}", function(data) {
+        window.max_ayat = data;
+        // initiate default value (AlFatihah:1)
+        document.getElementById("surat_selection").value = list_nama_surat[1];
+        set_start_ayat();
+        document.getElementById("start_ayat_selection").value = 1;
+        set_end_ayat();
+        document.getElementById("teks_ayat").innerHTML = 'QS 1 : 1';
+    });
+});
+
+// reset results
+function reset() {
+    document.getElementsByClassName('target')[0].innerHTML = "";
+    document.getElementsByClassName('target')[1].innerHTML = "";
+    document.getElementsByClassName('prediction')[0].innerHTML = "";
+    document.getElementsByClassName('prediction')[1].innerHTML = "";
+    // show "ULANGI" button
+    document.getElementById("ulangi").style.display = "none"
+    no_surat = document.getElementById("surat_selection").value.split('.')[0];
+    ayat = document.getElementById("start_ayat_selection").value;
+    return [no_surat, ayat]
+}
+
+// get next ayat
+$( ".next" ).click(function() {
+    ret = reset();
+    no_surat = parseInt(ret[0]);
+    ayat = document.getElementById("teks_ayat").innerHTML.split(' ').slice(-1)[0];
+    ayat = parseInt(ayat);
+    if (ayat == max_ayat[no_surat]) {
+        no_surat = no_surat + 1;
+        ayat = 1;
+    }
+    else {
+        ayat = ayat + 1;
+    }
+    if (no_surat == 115) {
+        alert('tidak ada ayat');
+    }
+    else {
+        document.getElementById("surat_selection").value = list_nama_surat[no_surat];
+        set_start_ayat();
+        set_end_ayat();
+        document.getElementById("start_ayat_selection").value = ayat;
+        document.getElementById("end_ayat_selection").value = ayat;
+        document.getElementById("teks_ayat").innerHTML = 'QS ' + no_surat + ' : ' + ayat;
+    }
+});
+
+// get previous ayat
+$( ".previous" ).click(function() {
+    ret = reset();
+    no_surat = parseInt(ret[0]);
+    ayat = document.getElementById("teks_ayat").innerHTML.split(' ').slice(-1)[0];
+    ayat = parseInt(ayat);
+    if (ayat == 1) {
+        no_surat = no_surat - 1;
+        ayat = max_ayat[no_surat];
+    }
+    else {
+        ayat = ayat - 1;
+    }
+    if (no_surat == 0) {
+        alert('tidak ada ayat');
+    }
+    else {
+        document.getElementById("surat_selection").value = list_nama_surat[no_surat];
+        set_start_ayat();
+        set_end_ayat();
+        document.getElementById("start_ayat_selection").value = ayat;
+        document.getElementById("end_ayat_selection").value = ayat;
+        document.getElementById("teks_ayat").innerHTML = 'QS ' + no_surat + ' : ' + ayat;
+    }
+});
+
+$( "#ulangi" ).click(function() {
+    ret = reset();
+    no_surat = parseInt(ret[0]);
+    ayat = document.getElementById("teks_ayat").innerHTML.split(' ').slice(-1)[0];
+    document.getElementById("teks_ayat").innerHTML = 'QS ' + no_surat + ' : ' + ayat;
+});
+
+// get ayat based on the chosen values
+$( "#surat_selection" ).change(function() {
+    reset();
+    set_start_ayat();
+    set_end_ayat();
+    document.getElementById("surat_selection").value = list_nama_surat[no_surat];
+    document.getElementById("start_ayat_selection").value = 1;
+    document.getElementById("end_ayat_selection").value = 1;
+    no_surat = document.getElementById("surat_selection").value.split('.')[0];
+    ayat = document.getElementById("start_ayat_selection").value;
+    document.getElementById("teks_ayat").innerHTML = 'QS ' + no_surat + ' : ' + ayat;
+});
+$( "#start_ayat_selection" ).change(function() {
+    ret = reset();
+    no_surat = parseInt(ret[0]);
+    ayat = parseInt(ret[1]);
+    set_end_ayat();
+    document.getElementById("end_ayat_selection").value = document.getElementById("start_ayat_selection").value;
+    document.getElementById("teks_ayat").innerHTML = 'QS ' + no_surat + ' : ' + ayat;
+});
+$( "#end_ayat_selection" ).change(function() {
+    reset();
+});
+
+// upload function using ajax
+function upload(blob) {
+    var data = new FormData();
+    data.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+    data.append('file', blob);
+    $.ajax({
+      url : "{% url 'hafalan' %}",
+      type: 'POST',
+      data: data,
+      contentType: false,
+      processData: false,
+      success: function(data) {
+        no_surat = document.getElementById("surat_selection").value.split('.')[0];
+        ayat = document.getElementById("teks_ayat").innerHTML.split(' ').slice(-1)[0];
+        url = '/metadata/ayat_quran_simple/' + no_surat + '_' + ayat;
+        $.getJSON(url, function(ayat) {
+            target = ayat.split(' ');
+            document.getElementById("arti").innerHTML = "";
+            // highlight missing words in target ayat
+            text_target = '';
+            for ( i=0; i<target.length; i++ ) {
+                if (data.prediction.includes(target[i])) {
+                    text_target += target[i] + " ";
+                }
+                else {
+                    text_target += "<span style='background-color: #2cf13b;'>" + target[i] + "</span>" + " ";
+                }
+            }
+            // highlight mistakes in predicted ayat
+            text_prediction = '';
+            for ( i=0; i<data.prediction.length; i++ ) {
+                if (target.includes(data.prediction[i])) {
+                    text_prediction += data.prediction[i] + " ";
+                }
+                else {
+                    text_prediction += "<span style='background-color: #FFFF00;'>" + data.prediction[i] + "</span>" + " ";
+                }
+            }
+            // show results
+            document.getElementsByClassName('target')[0].innerHTML = "<strong>Bacaan Seharusnya</strong> <br> (<strong><span style='background-color: #2cf13b'>hijau</span></strong> mengindikasikan kata yang tidak terbaca)";
+            document.getElementsByClassName('target')[1].innerHTML = text_target;
+            document.getElementsByClassName('prediction')[0].innerHTML = "<strong>Bacaan Yang Terdeteksi</strong> <br> (<strong><span style='background-color: #FFFF00'>kuning</span></strong> mengindikasikan kata yang salah)";
+            document.getElementsByClassName('prediction')[1].innerHTML = text_prediction;
+            // show "ULANGI" button
+            document.getElementById("ulangi").style.display = "block"
+        });
+        }
+        // var no_surat = document.getElementById("surat_selection").value.split('.')[0];
+        // console.log(quran_dict)
+        // var start_ayat = document.getElementById("start_ayat_selection").value;
+        // var end_ayat = document.getElementById("end_ayat_selection").value;
+
+        // // highlight missing words in target ayats
+        // var text_target = '';
+        // var tmp = data.prediction;
+        // for ( ayat=start_ayat; ayat<=end_ayat; ayat++ ) {
+        //     text_target += '(' + ayat + ')';
+        //     target = quran_dict[no_surat + '_' + ayat].split(' ');
+        //     for ( i=0; i<target.length; i++ ) {
+        //         if (tmp.includes(target[i])) {
+        //             text_target += target[i] + " ";
+        //             idx = tmp.indexOf(target[i]);
+        //             tmp.splice(idx, 1);
+        //         }
+        //         else {
+        //             text_target += "<span style='background-color: #FFFF00;'>" + target[i] + "</span>" + " ";
+        //         }
+        //     }
+        //     text_target += ' <br> ';
+        // }
+        // // show results
+        // document.getElementsByClassName('target')[0].innerHTML = "<strong>Bacaan Seharusnya</strong> <br> (<strong><span style='background-color: #FFFF00'>kuning</span></strong> mengindikasikan kata yang tidak terbaca)";
+        // document.getElementsByClassName('target')[1].innerHTML = text_target;
+        // // show "ULANGI" button
+        // document.getElementById("ulangi").style.display = "block"
+        // }
+    });
+}
+</script>
+{% endblock javascripts %}

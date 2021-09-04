@@ -1,0 +1,149 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Cari Ayat {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+        <div class="row" >
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h3 class="card-title">Mencari Ayat</h3>
+                </div>
+                <div class="card-body">
+                  <div>
+
+                    <div class="card-header">
+                      <div>
+                        <div class="d-flex align-items-center justify-content-center" data-role="controls">
+                          <button type="button" rel="tooltip" class="rekam btn btn-success btn-round">
+                            <i class="icon-rekam material-icons">mic_none</i> Rekam</button>
+                        </div>
+                        <div data-role="recordings"></div>
+                      </div>
+                      <p id="prediction" dir="rtl" lang="ar" style="color:#2e4053; font-size:25px; margin-top: 2%;" align="right"></p>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12" style="margin-top: -3%;">
+              <div class="card">
+                <div style="margin-left: 3%; margin-top: 2%;">
+                  <h3 id="similar" ></h3>
+                </div>
+                <div id="start-loop" style="margin-left: 3%;">
+                </div>
+                <div class="card-body">
+                  <div id="typography">
+                    <div class="row">
+                      <div class="tim-typo" style="margin-left: 10%; margin-right: 5%;">
+                        <p id="arti"></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        </div>
+
+
+
+{% endblock content %}
+
+
+
+
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="/static/assets/js/recorder.js"></script>
+<script src="/static/assets/js/get_wav.js"></script>
+<script>
+// get required data
+$.getJSON("{% url 'metadata_listSurat' %}", function(data) {list_nama_surat = data});
+$.getJSON("{% url 'metadata_terjemah' %}", function(data) {terjemah = data});
+$.getJSON("{% url 'metadata_ayatQuranSimpleAllNoBasmalah' %}", function(data) {window.all_ayat = data});
+
+function upload(blob) {
+    var data = new FormData();
+    data.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+    data.append('file', blob);
+    $.ajax({
+      url : "{% url 'cari' %}",
+      type: 'POST',
+      data: data,
+      contentType: false,
+      processData: false,
+      success: function(data) {
+        // reset DOM
+        let element = document.getElementById("start-loop");
+        while (element.firstChild) {
+          element.removeChild(element.firstChild);
+        }
+        document.getElementById('similar').innerHTML = "";
+        // get response data
+        result = JSON.parse(data.result);
+        ayat = Object.keys(result);
+        Nayat = Object.keys(result).length;
+        // if similar ayats are found
+        document.getElementById('prediction').innerHTML = data.prediction;
+        if (Nayat > 1) {
+          document.getElementById('similar').innerHTML = 'Ditemukan ' + Nayat + ' Ayat Serupa';
+        }
+        // loop over similar ayats
+        var start = document.getElementById('start-loop');
+        for ( i=0; i<Nayat; i++ ) {
+          no_surat = ayat[i].split('_')[0];
+          no_ayat = ayat[i].split('_')[1];
+          // info about ayat
+          newdiv = document.createElement('h4');
+          newdiv.style="margin-top: 5%;"
+          newdiv.innerHTML = '<strong>Q.S. ' + list_nama_surat[no_surat].split('.')[1] + ' Ayat ' + no_ayat + '</strong>';
+          // newdiv.id = "add-info"
+          start.appendChild(newdiv);
+          // info about similarity
+          newdiv = document.createElement('h4');
+          newdiv.style = "color: blue;"
+          newdiv.innerHTML = 'kecocokan: ' + Math.round(result[ayat[i]][1]*100) + '%';
+          // newdiv.id = "add-info"
+          start.appendChild(newdiv);
+          // teks ayat
+          newdiv = document.createElement('p');
+          // highlight matched words
+          target = all_ayat[no_surat + '_' + no_ayat].split(' ');
+          tmp = data.prediction.split(' ');
+          text_target = "";
+          for ( j=0; j<target.length; j++ ) {
+              if (tmp.includes(target[j])) {
+                  text_target += "<span style='color: blue; font-weight: bold;'>" + target[j] + "</span>" + " ";
+                  idx = tmp.indexOf(target[j]);
+                  tmp.splice(idx, 1);
+              }
+              else {
+                  text_target += target[j] + " ";
+              }
+          }
+          newdiv.innerHTML = text_target;          
+          newdiv.style = "font-size: 25px; margin-right: 10%; margin-left: 5%; text-align: right; line-height: 2;"
+          // newdiv.id = "add-info"
+          start.appendChild(newdiv);
+          // ayat translation
+          newdiv = document.createElement('p');
+          newdiv.innerHTML = '<i>'+terjemah[no_surat + '_' + no_ayat] + '  (QS ' + no_surat + ' : ' + no_ayat + ')</i>';
+          newdiv.style = "font-size: 100%; margin-right: 10%; margin-left: 5%;"
+          newdiv.class = "tim-typo"
+          // newdiv.id = "add-info";
+          start.appendChild(newdiv);
+        }
+      },
+    });
+}
+</script>
+{% endblock javascripts %}

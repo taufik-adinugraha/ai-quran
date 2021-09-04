@@ -1,0 +1,212 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Profil {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header card-header-info">
+                  <h3 class="card-title">Profil Kontributor</h3>
+                </div>
+                <div class="card-body">
+                  <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Nama Alias</label>
+                          <label type="text" class="form-control">{{ username }}</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Email</label>
+                          <label type="text" class="form-control">{{ email }}</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Jenis Kelamin</label>
+                          <div class="form-check form-check-radio">
+                              <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="kelamin" value="L" {% if 'L' == kelamin %} checked {% endif %}>
+                                  Laki-laki
+                                  <span class="circle">
+                                      <span class="check"></span>
+                                  </span>
+                              </label>
+                          </div>
+                          <div class="form-check form-check-radio">
+                              <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="kelamin" value="P" {% if 'P' == kelamin %} checked {% endif %}>
+                                  Perempuan
+                                  <span class="circle">
+                                      <span class="check"></span>
+                                  </span>
+                              </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="bmd">Kelompok Usia</label>
+                          <div class="form-check form-check-radio">
+                              <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="kelompok_usia" value="A" {% if 'A' == kelompok_usia %} checked {% endif %}>
+                                  7-12
+                                  <span class="circle">
+                                      <span class="check"></span>
+                                  </span>
+                              </label>
+                          </div>
+                          <div class="form-check form-check-radio">
+                              <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="kelompok_usia" value="B" {% if 'B' == kelompok_usia %} checked {% endif %}>
+                                  13-18
+                                  <span class="circle">
+                                      <span class="check"></span>
+                                  </span>
+                              </label>
+                          </div>
+                          <div class="form-check form-check-radio">
+                              <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="kelompok_usia" value="C" {% if 'C' == kelompok_usia %} checked {% endif %}>
+                                  19-25
+                                  <span class="circle">
+                                      <span class="check"></span>
+                                  </span>
+                              </label>
+                          </div>
+                          <div class="form-check form-check-radio">
+                              <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="kelompok_usia" value="D" {% if 'D' == kelompok_usia %} checked {% endif %}>
+                                  26-35
+                                  <span class="circle">
+                                      <span class="check"></span>
+                                  </span>
+                              </label>
+                          </div>
+                          <div class="form-check form-check-radio">
+                              <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="kelompok_usia" value="E" {% if 'E' == kelompok_usia %} checked {% endif %}>
+                                  36-45
+                                  <span class="circle">
+                                      <span class="check"></span>
+                                  </span>
+                              </label>
+                          </div>
+                          <div class="form-check form-check-radio">
+                              <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="kelompok_usia" value="F" {% if 'F' == kelompok_usia %} checked {% endif %}>
+                                  46-55
+                                  <span class="circle">
+                                      <span class="check"></span>
+                                  </span>
+                              </label>
+                          </div>
+                          <div class="form-check form-check-radio">
+                              <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="kelompok_usia" value="G" {% if 'G' == kelompok_usia %} checked {% endif %}>
+                                  56+
+                                  <span class="circle">
+                                      <span class="check"></span>
+                                  </span>
+                              </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Lembaga</label>
+                          <label type="text" class="form-control">{{ kode_lembaga }}</label>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-info pull-right">Update Data</button>
+                    <div class="clearfix"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header card-header-info">
+                  <h3 class="card-title">Kelengkapan Ayat Per Surat (%)</h3>
+                </div>
+                <div class="card card-chart">
+                  <div class="card-header card-header-secondary">
+                    <div id="canvas-holder" style="margin-top: 3%;">
+                      <canvas id="chart-area-completeness" height="1500"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+$.getJSON("{% url 'metadata_listSurat' %}", function(data) {
+  window.list_nama_surat = data;
+  window.surat = [];
+  for (i=1; i<=114; i++) {
+    surat.push(list_nama_surat[i]);
+  };
+  var config = {
+    type: 'horizontalBar',
+    data: {
+      datasets: [{
+        data: {{ percent_completeness }},
+        backgroundColor: {{ color_completeness | safe }},
+        // backgroundColor: 'rgb(255, 127, 80, 0.7)',
+        // borderColor: 'rgba(64, 224, 208)',
+        borderWidth: 2,
+      }],
+      labels: surat,
+    },
+    options: {
+
+      scales: {
+          xAxes: [{
+              ticks: {
+                  max: 100,
+                  min: 0,
+                  stepSize: 20
+              }
+          }]
+      },
+
+      responsive: true,
+      legend: {
+        display: false,
+      },
+      title: {
+       display: true,
+       text: {{ completeness.Nayat }} + ' dari 6236 ayat (' + {{ completeness.total_percent }} + '%)',
+      },
+      animation: {
+        animateScale: true,
+      }
+    }
+  };
+  var ctx = document.getElementById('chart-area-completeness').getContext('2d');
+  window.barplot = new Chart(ctx, config);
+});
+</script>
+{% endblock javascripts %}

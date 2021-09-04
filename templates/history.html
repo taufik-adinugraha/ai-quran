@@ -1,0 +1,151 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Histori Rekaman {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}{% block content %}
+
+        <div class="row" >
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-info">
+                  <h3 class="card-title">Rekaman Bacaan Al-Quran</h3>
+                  <h4 class="card-title">{{ total_ayat }} Ayat ({{ total_ukuran }} MB)</h4>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+
+                    <div class="btn-group">
+                      <div class="col-md-2">
+                          <select id="surat_selection" class="form-control text-center" style="width: 230px; font-size: 16px;"></select>
+                      </div>
+                      <button type="button" class="btn btn-default dropdown-toggle d-none d-lg-block d-xl-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-left: 55%;">
+                        Urutkan Berdasarkan
+                      </button>
+                      <div class="dropdown-menu" sytle="align: right">
+                        <option class="dropdown-item" onclick="location.href='{% url 'history' 'surat_ayat' %}'">Surat & Ayat</a>
+                        <option class="dropdown-item" onclick="location.href='{% url 'history' 'ukuran' %}'">Ukuran File</a>
+                        <option class="dropdown-item" onclick="location.href='{% url 'history' 'waktu' %}'">Waktu Rekaman</a>
+                      </div>
+                    </div>
+
+                    <table class="d-none d-lg-block d-xl-block table">
+                      <thead class=" text-info">
+                        <th class="text-center">Nama Surat</th>
+                        <th class="text-center">No. Surat</th>
+                        <th class="text-center">No. Ayat</th>
+                        <th class="text-center">Ukuran File</th>
+                        <th class="text-center">Waktu Rekaman</th>
+                        <th class="text-center"></th>
+                        <th class="text-center"></th>
+                        <th class="text-center"></th>
+                      </thead>
+                      <tbody>
+                        {% for e in db %}
+                        <tr>
+                          <td id="nama_surat" class="text-center text-info" style="font-size: 20px">{{ e.nama_surat }}</td>
+                          <td id="no_surat" class="text-center text-info">{{ e.no_surat }}</td>
+                          <td id="no_ayat" class="text-center text-info">{{ e.no_ayat }} / {{ e.max_ayat }}</td>
+                          <td class="text-center text-info">{{ e.ukuran }} KB</td>
+                          <td class="text-center text-info">{{ e.waktu|date:"d-m-Y H:i:s" }}</td>
+                          <td class="text-right" >
+                          <audio id="{{ e.no_surat }}_{{ e.no_ayat }}" src="{{ e.filepath }}" preload="auto" controls="controls" style="border-radius:20px"></audio>
+                          </td>
+                          <td class="text-right">
+                            <form action="{% url 'record' e.no_surat__no_ayat %}" method="get">
+                              <a class="btn btn-success btn-sm btn-round" href="javascript:;" onclick="if(confirm('rekam ulang?')){parentNode.submit()};">
+                                <i class="material-icons">mic</i>
+                              </a>
+                            </form>
+                          </td>
+                          <td class="text-left">
+                            <form action="{% url 'delete_ayat' e.pk %}" method="post">
+                              {% csrf_token %}
+                              <a class="btn btn-danger btn-sm btn-round" href="javascript:;" onclick="if(confirm('hapus data audio?')){parentNode.submit()};">
+                                <i class="material-icons">delete_forever</i>
+                              </a>
+                            </form>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    <div class="container d-lg-none d-xl-none text-center">
+                      {% for e in db %}
+                      <div class="card">
+                      <div class="card-body">
+                          <h5 class="card-title text-center" style="font-size: 30px">{{ e.nama_surat }}</h5>
+                          <p class="text-center">
+                            <span class="text-info">No. Surat: </span>{{ e.no_surat }} -
+                            <span class="text-info">No. Ayat: </span>{{ e.no_ayat }} / {{ e.max_ayat }} <br />
+                            <span class="text-info">Waktu rekaman: </span>{{ e.waktu|date:"d-m-Y H:i:s" }}
+                          </p>
+                          <div class="center col s12 embed-responsive" style="height:30px; border-radius:20px">
+                              <audio class="embed-responsive-item" id="{{ e.no_surat }}_{{ e.no_ayat }}" src="{{ e.filepath }}" preload="auto" controls="controls"></audio>
+                          </div>
+                          <div class="row">
+                          <div class="col s6 text-center">
+                              <form action="{% url 'record' e.no_surat__no_ayat %}" method="get">
+                                <a class="btn btn-success btn-sm btn-round btn-block" href="javascript:;" onclick="if(confirm('rekam ulang?')){parentNode.submit()};">
+                                  <i class="material-icons">mic</i>
+                                </a>
+                              </form>
+                          </div>
+                          <div class="col s6 text-center">
+                               <form action="{% url 'delete_ayat' e.pk %}" method="post">
+                                {% csrf_token %}
+                                <a class="btn btn-danger btn-sm btn-round btn-block" href="javascript:;" onclick="if(confirm('hapus data audio?')){parentNode.submit()};">
+                                  <i class="material-icons">delete_forever</i>
+                                </a>
+                              </form>
+                          </div>
+                          </div>
+                      </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+// audio player
+function play_single_sound(no_surat, no_ayat) {
+  document.getElementById(no_surat+'_'+no_ayat).play();
+}
+// set surat selection
+$.getJSON("{% url 'metadata_listSurat' %}", function(data) {
+    window.list_nama_surat = data;
+    // set surat selection
+    var start = document.getElementById('surat_selection');
+    newopt = document.createElement('option');
+    newopt.value = 'surat_ayat';
+    newopt.innerHTML = 'Tampilkan Semua Ayat';
+    newopt.style = "font-size: 16px";
+    start.appendChild(newopt);
+    for ( i=1; i<=114; i++ ) {
+        surat = list_nama_surat[i];
+        newopt = document.createElement('option');
+        newopt.value = surat;
+        newopt.innerHTML = surat;
+        newopt.style = "font-size: 16px";
+        start.appendChild(newopt);
+    }
+    document.getElementById('surat_selection').value = "{{ selected_surat | safe }}";
+});
+
+
+// update table based on the selected surat
+$( "#surat_selection" ).change(function() {
+    no_surat = document.getElementById("surat_selection").value.split('.')[0];
+    window.location.href = no_surat;
+});
+</script>
+{% endblock javascripts %}

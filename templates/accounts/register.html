@@ -1,0 +1,141 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Login {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="row d-flex align-items-center justify-content-center">
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-header card-header-info">
+          <h4 class="card-title">
+            Buat Akun Baru
+          </h4>
+        </div>
+        <div class="card-body">
+
+          <h6 class="card-category">
+              {% if msg %}
+                <span class="text-danger">{{ msg | safe }}</span>
+              {% endif %}
+          </h6>
+
+          <br />
+
+          {% if success %}
+
+            <p class="">
+              Silakan <a href={% url 'login' %} class="text-black text-small">login</a> menggunakan akun yang telah dibuat.
+            </p>
+
+          {% else %}
+            <form role="form" method="post" action="">
+
+              {% csrf_token %}
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    {{ form.username }}
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.username.errors }}</span>
+
+              <br />
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    {{ form.email }}
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.email.errors }}</span>
+
+              <br />
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Jenis Kelamin {{ form.kelamin }}</label>
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.kelamin.errors }}</span>
+
+              <br />
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Kelompok Usia {{ form.kelompok_usia }}</label>
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.kelompok_usia.errors }}</span>
+
+              <br />
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    {{ form.kode_lembaga }}
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.kode_lembaga.errors }}</span>
+
+              <br />
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    {{ form.password1 }}
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.password1.errors }}</span>
+
+              <br />
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    {{ form.password2 }}
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.password2.errors }}</span>
+
+              <br />
+
+<!--               <span style="font-size: 11px; color: red">Dengan melakukan registrasi, saya bersedia bahwa rekaman audio yang disimpan akan digunakan oleh tim PyRuhr untuk pengembangan aplikasi. Data tersebut tidak akan didistribusikan ke pihak ketiga tanpa izin.
+              </span> -->
+
+              <br />
+
+              <button type="submit" name="register" class="btn btn-info pull-left">Daftar</button>
+
+              &nbsp; &nbsp;
+              <span class="pull-right">
+                Sudah memiliki akun? <a href="{% url 'login' %}" class="text-info">Login</a>
+              </span>
+
+              <div class="clearfix"></div>
+
+            </form>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

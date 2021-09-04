@@ -1,0 +1,142 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Histori Rekaman {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}{% block content %}
+
+        <div class="row" >
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-success">
+                  <h3 class="card-title">Rekaman Bacaan Seluruh Kontributor</h3>
+                  <h4 class="card-title">{{ total_ayat }} Ayat ({{ total_ukuran }} MB)</h4>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+
+                    <div class="btn-group">
+                      <div class="col-md-4">
+                          <select id="lembaga_selection" class="form-control text-center" style="width: 100px; font-size: 16px;"></select>
+                      </div>
+                      <div class="col-md-6">
+                          <select id="user_selection" class="form-control text-center" style="width: 140px; font-size: 16px;"></select>
+                      </div>
+<!--                       <div class="col-md-2">
+                          <select id="surat_selection" class="form-control text-center" style="margin-left: 150%; width: 230px; font-size: 16px;"></select>
+                      </div> -->
+                      <div class="col-md-4">
+                        <button id="filter_data" type="submit" class="btn btn-default" aria-haspopup="true" aria-expanded="false">
+                          {% csrf_token %}
+                          Pilih
+                        </button>
+                      </div>
+                    </div>
+
+                    <table class="table">
+                      <thead class=" text-info">
+                        <th class="text-center">Nama Surat</th>
+                        <th class="text-center">No. Surat</th>
+                        <th class="text-center">No. Ayat</th>
+                        <th class="text-center"></th>
+                        <th class="text-center"></th>
+                      </thead>
+                      <tbody>
+                        {% for e in db %}
+                        <tr>
+                          <td id="nama_surat" class="text-center" style="font-size: 20px">{{ e.nama_surat }}</td>
+                          <td id="no_surat" class="text-center">{{ e.no_surat }}</td>
+                          <td id="no_ayat" class="text-center">{{ e.no_ayat }} / {{ e.max_ayat }}</td>
+                          <td class="text-center">
+                          <audio id="{{ e.no_surat }}_{{ e.no_ayat }}" src="{{ e.filepath }}" preload="auto" controls="controls"></audio>
+                          </td>
+<!--                           <td class="text-left">
+                            <form action="{% url 'delete_ayat' e.pk %}" method="post">
+                              {% csrf_token %}
+                              <a class="btn btn-danger btn-sm btn-round" href="javascript:;" onclick="if(confirm('hapus data audio?')){parentNode.submit()};">
+                                <i class="material-icons">delete_forever</i>
+                              </a>
+                            </form>
+                          </td> -->
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+// audio player
+function play_single_sound(no_surat, no_ayat) {
+  document.getElementById(no_surat+'_'+no_ayat).play();
+}
+// set lembaga selection
+var list_lembaga = {{ list_lembaga | safe }};
+var start = document.getElementById('lembaga_selection');
+for ( l=0; l<list_lembaga.length; l++ ) {
+    lembaga = list_lembaga[l];
+    newopt = document.createElement('option');
+    newopt.value = lembaga;
+    newopt.innerHTML = lembaga;
+    newopt.style = "font-size: 16px";
+    start.appendChild(newopt);
+}
+document.getElementById('lembaga_selection').value = "{{ selected_lembaga }}";
+
+// set user selection
+function set_user() {
+    // reset DOM
+    let element = document.getElementById("user_selection");
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    };
+    var start = document.getElementById('user_selection');
+    lembaga =  document.getElementById('lembaga_selection').value;
+    for ( u=0; u<user_dict[lembaga].length; u++ ) {
+      user = user_dict[lembaga][u];
+      newopt = document.createElement('option');
+      newopt.value = user;
+      newopt.innerHTML = user;
+      newopt.style = "font-size: 16px";
+      start.appendChild(newopt);
+    }
+};
+var user_dict = {{ user_dict | safe }};
+set_user();
+document.getElementById('user_selection').value = "{{ selected_user }}";
+$( "#lembaga_selection" ).change(function() {
+    set_user();
+});
+
+// set surat selection
+// $.getJSON("{% url 'metadata_listSurat' %}", function(data) {
+//     window.list_nama_surat = data;
+//     // set surat selection
+//     var start = document.getElementById('surat_selection');
+//     for ( i=1; i<=114; i++ ) {
+//         surat = list_nama_surat[i];
+//         newopt = document.createElement('option');
+//         newopt.value = surat;
+//         newopt.innerHTML = surat;
+//         newopt.style = "font-size: 16px";
+//         start.appendChild(newopt);
+//     }
+//     document.getElementById('surat_selection').value = "{{ selected_surat | safe }}";
+// });
+
+// update table based on the selected surat
+$( "#filter_data" ).click(function() {
+    lembaga = document.getElementById('lembaga_selection').value
+    user = document.getElementById('user_selection').value
+    // surat = document.getElementById('surat_selection').value.split('.')[0]
+    location.href = "/history_all_rekaman/" + lembaga + "_" + user;
+});
+</script>
+{% endblock javascripts %}

@@ -1,26 +1,27 @@
+# pyruhr_quran
 
-Quran Recitation Recognition Demo
-========================
-Django webapp demo for quran recitation recognition using DeepSpeech. Model was trained using ~600 hours of quran recitation from about 40 imams.
+## Model diadaptasi dari:
 
+https://github.com/mozilla/DeepSpeech/
 
-Dependencies
-========================
-python 3.7
+https://github.com/tarekeldeeb/DeepSpeech-Quran
 
-```
+## Setup:
+
+#### buat environment baru, misal buat environment bernama "quran" menggunakan conda:
+
+conda create -n quran python=3.7
+
+#### aktivkan environment yang sudah dibuat
+
+conda activate quran
+
+#### install library yang dibutuhkan
+
 pip install -r requirements.txt
-```
 
-Executing program
-========================
-debug mode:
-```
+#### nyalakan server
+
 python manage.py runserver
-```
 
-open localhost from web browser
-
-Video Demo
-========================
-https://youtu.be/phCtfF-274E
+#### akses localhost menggunakan web browser

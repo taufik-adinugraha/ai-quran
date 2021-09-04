@@ -1,0 +1,151 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Bacaan {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+        <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-warning">
+                  <h3 class="card-title">Belajar Membaca</h3>
+                </div>
+
+                    <div class="card-header d-none d-lg-block d-xl-block">
+                      <div class="card-header d-flex align-items-center justify-content-center">
+                        <div class="btn-group flex-wrap" role="group" aria-label="Basic example">
+                          <button type="button"  rel="tooltip" class="previous btn btn-default btn-round"><i class="material-icons">west</i></button>
+                          <button type="button"  rel="tooltip" class="rekam btn btn-success btn-round"><i class="icon-rekam material-icons">mic_none</i> Rekam</button>
+                          <button type="button"  rel="tooltip" class="next btn btn-default btn-round"><i class="material-icons">east</i></button>
+                        </div>
+                      </div>
+                      <div data-role="recordings"></div>
+                    </div>
+
+                    <div class="card-header">
+                      <div>
+                        <button id="ulangi" type="button" rel="tooltip" class="btn btn-primary btn-round" style="float: right; margin-right: 3%; display: none;">
+                          <i class="material-icons">cached</i> Ulangi</button>
+                      </div>
+                    </div>
+
+                    <div class="card-body row">
+                      <div class="col col-lg-12 col-12 d-flex align-items-center justify-content-center">
+                        <p class="arabic-text" id="teks"></p>
+                      </div>
+                    </div>
+
+                    <div style="margin-right: 5%; margin-top: -1%; margin-bottom: 5%;">
+                        <p class="prediction" dir="rtl" style="color:#2e4053; font-size:16px;" align="right"></p>
+                        <p class="prediction" dir="rtl" lang="ar" style="color:#2e4053; font-size:35px; line-height:2;" align="right"></p>
+                    </div>
+
+              </div>
+            </div>
+
+        </div>
+
+   <footer class="fixed-bottom footer-record d-lg-none d-xl-none">
+     <div class="card d-flex align-items-center justify-content-center">
+       <div class="btn-group flex-wrap" role="group" aria-label="Basic example">
+         <button type="button"  rel="tooltip" class="previous btn btn-default btn-round"><i class="material-icons">west</i></button>
+         <button type="button"  rel="tooltip" class="rekam btn btn-success btn-round"><i class="icon-rekam material-icons">mic_none</i> Rekam</button>
+         <button type="button"  rel="tooltip" class="next btn btn-default btn-round"><i class="material-icons">east</i></button>
+       </div>
+       <div data-role="recordings"></div>
+     </div>
+   </footer>
+
+
+{% endblock content %}
+
+
+
+
+
+
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="/static/assets/js/recorder.js"></script>
+<script src="/static/assets/js/get_wav.js"></script>
+<script>
+
+$.getJSON("{% url 'metadata_bacaNonQuran' %}", function(data) {
+    window.bacaArab = data;
+    document.getElementById("teks").innerHTML = bacaArab['1'];
+    idx = 1;
+});
+
+// reset results
+function reset() {
+    document.getElementsByClassName('prediction')[0].innerHTML = "";
+    document.getElementsByClassName('prediction')[1].innerHTML = "";
+    // show "ULANGI" button
+    document.getElementById("ulangi").style.display = "none"
+}
+$( "#ulangi" ).click(function() {
+    reset();
+});
+
+// get next ayat
+$( ".next" ).click(function() {
+    reset();
+    max = Object.keys(bacaArab).length;
+    if (idx < max) {
+        idx = idx + 1;
+    }
+    else {
+        idx = max;
+    }
+    document.getElementById("teks").innerHTML = bacaArab[idx];
+});
+
+// get previous ayat
+$( ".previous" ).click(function() {
+    reset();
+    if (idx > 1) {
+        idx = idx - 1;
+    }
+    else {
+        idx = 1;
+    }
+    document.getElementById("teks").innerHTML = bacaArab[idx];
+});
+
+// upload function using ajax
+function upload(blob) {
+    var data = new FormData();
+    data.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+    data.append('file', blob);
+    $.ajax({
+      url : "{% url 'bacaan' %}",
+      type: 'POST',
+      data: data,
+      contentType: false,
+      processData: false,
+      success: function(data) {
+        target = bacaArab[idx];
+        // highlight mistakes
+        text_prediction = '';
+        for ( i=0; i<data.prediction.length; i++ ) {
+            if (target.includes(data.prediction[i])) {
+                text_prediction += data.prediction[i] + " ";
+            }
+            else {
+                text_prediction += "<span style='background-color: #FFFF00;'>" + data.prediction[i] + "</span>" + " ";
+            }
+        }
+        // show results
+        document.getElementsByClassName('prediction')[0].innerHTML = "<strong>Bacaan Yang Terdeteksi</strong> <br> (<strong><span style='background-color: #FFFF00'>kuning</span></strong> mengindikasikan kata yang salah)";
+        document.getElementsByClassName('prediction')[1].innerHTML = text_prediction;
+        // show "ULANGI" button
+        document.getElementById("ulangi").style.display = "block"
+        }
+    });
+}
+</script>
+{% endblock javascripts %}

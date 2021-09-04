@@ -1,0 +1,89 @@
+    <div class="sidebar" data-color="azure" data-background-color="white" data-image="/static/assets/img/Quran-2.jpg">
+      <div class="logo">
+        <a target="_blank" rel="noopener noreferrer" 
+           class="simple-text logo-normal">
+          PyRuhr
+        </a>
+      </div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'cari' %}" {% if 'cari' == segment %} style="background-color: #ab47bc;" {% endif %}>
+              <i class="material-icons" {% if 'cari' == segment %} style="color: #FFFFFF;" {% endif %}>manage_search</i>
+              <p {% if 'cari' == segment %} style="color: #FFFFFF;" {% endif %}>Mencari Ayat</p>
+            </a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'hafalan' %}" {% if 'hafalan' == segment %} style="background-color: #00bcd4;" {% endif %}>
+              <i class="material-icons" {% if 'hafalan' == segment %} style="color: #FFFFFF;" {% endif %}>online_prediction</i>
+              <p {% if 'hafalan' == segment %} style="color: #FFFFFF;" {% endif %}>Muroja'ah Hafalan</p>
+            </a>
+          </li>
+<!--           <li class="nav-item">
+            <a class="nav-link" href="{% url 'bacaan' %}" {% if 'bacaan' == segment %} style="background-color: #ffa726;" {% endif %}>
+              <i class="material-icons" {% if 'bacaan' == segment %} style="color: #FFFFFF;" {% endif %}>fact_check</i>
+              <p {% if 'bacaan' == segment %} style="color: #FFFFFF;" {% endif %}>Belajar Membaca</p>
+            </a>
+          </li> -->
+          
+          {% if user.is_authenticated and user.username == 'admindata' %}
+          <li class="nav-item {% if 'Allrecord' == segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'history_all_rekaman' 'PYRGER_admindata' %}" {% if 'Allrecord' == segment %} style="background-color: #4caf50;" {% endif %}>
+              <i class="material-icons" {% if 'Allrecord' == segment %} style="color: #FFFFFF;" {% endif %}>settings_voice</i>
+              <p>Semua Rekaman</p>
+            </a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'logout' %}" >
+              <i class="material-icons">directions_run</i>
+              <p>Logout</p>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user.is_authenticated and user.username != 'admindata' %}
+          <li class="nav-item {% if 'dashboard' == segment %} active {% endif %}">
+            <a class="nav-link" href={% url 'dashboard' %}>
+              <i class="material-icons">stacked_bar_chart</i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'record' == segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'record' 0 %}">
+              <i class="material-icons">settings_voice</i>
+              <p>Rekaman Baru</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'history' == segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'history' 'surat_ayat' %}">
+              <i class="material-icons">source</i>
+              <p>Histori Rekaman</p>
+            </a>
+          </li>
+<!--           <li class="nav-item {% if 'profile' == segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'profile' %}">
+              <i class="material-icons">person</i>
+              <p>Profil</p>
+            </a>
+          </li> -->
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'logout' %}" >
+              <i class="material-icons">directions_run</i>
+              <p>Logout</p>
+            </a>
+          </li>
+          {% elif user.username != 'admindata' %}
+          <li class="nav-item {% if 'login' == segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'login' %}" >
+              <i class="material-icons">assignment_ind</i>
+              <p>Login</p>
+            </a>
+          </li>
+          {% endif %}
+
+        </ul>
+      </div>
+
+
+    </div>

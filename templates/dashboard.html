@@ -1,0 +1,385 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Statistik {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="row">
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-warning card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">group</i>
+            </div>
+            <p class="card-category">Jumlah Kontributor</p>
+            <h3 class="card-title">{{ total_user }}</h3>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons text-warning">switch_account</i>
+              <a href="{% url 'profile' %}">Username: {{ request.user.username }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-success card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">playlist_play</i>
+            </div>
+            <p class="card-category">Jumlah Ayat</p>
+            <h3 class="card-title">{{ total_ayat }}</h3>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons text-success">list</i> Jumlah Surat: {{ total_surat }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-danger card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">auto_graph</i>
+            </div>
+            <p class="card-category">Capaian Target</p>
+            <h3 class="card-title">{{ persen_target }}%</h3>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons text-danger">gps_fixed</i> Target: {{ target_ayat }} Ayat
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-info card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">storage</i>
+            </div>
+            <p class="card-category">Total Data</p>
+            <h3 class="card-title">{{ total_data }} <small>GB</small></h3>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons text-info">cloud_circle</i> Prediksi 100% Target: {{ prediksi_data_target }} GB
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- CHART GENDER -->
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card card-chart">
+          <div class="card-header card-header-secondary">
+            <div id="canvas-holder" style="margin-top: 3%; margin-left: -70%; width:239%;">
+              <canvas id="chart-area-gender"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+<!-- CHART AYAT PER JUZ -->
+      <div class="col-md-8">
+        <div class="card card-chart">
+          <div class="card-header card-header-secondary">
+            <div id="canvas-holder" style="margin-top: 3%;">
+              <canvas id="chart-area-juz"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- CHART KELOMPOK USIA -->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card card-chart">
+          <div class="card-header card-header-secondary">
+            <div id="canvas-holder" style="margin-top: 3%;">
+              <canvas id="chart-area-usia"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+<!-- CHART TIMESERIES -->
+      <div class="col-md-6">
+        <div class="card card-chart">
+          <div class="card-header card-header-secondary">
+            <div id="canvas-holder" style="margin-top: 3%;">
+              <canvas id="chart-area-timeseries"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- TABLE -->
+    <div class="row">
+      <div class="col-lg-6 col-md-12">
+        <div class="card">
+          <div class="card-header card-header-info">
+<!--             <h4 class="card-title">Kontributor <i><strong>Top 5</strong></i></h4> -->
+            <h4 class="card-title">Kontributor</i></h4>
+          </div>
+          <div class="card-body table-responsive">
+            <table class="table table-hover">
+              <thead class="text-info">
+                <th>username</th>
+                <th>lembaga</th>
+                <th>total ayat</th>
+                <th>total surat</th>
+              </thead>
+              <tbody>
+              {% for e in top5_user %}
+                <tr>
+                  <td>{{ e.username }}</td>
+                  <td>{{ e.lembaga }}</td>
+                  <td>{{ e.jumlah_ayat }}</td>
+                  <td>{{ e.jumlah_surat }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12">
+        <div class="card">
+          <div class="card-header card-header-success">
+            <h4 class="card-title">Lembaga</h4>
+          </div>
+          <div class="card-body table-responsive">
+            <table class="table table-hover">
+              <thead class="text-success">
+                <th>lembaga</th>
+                <th>kontributor</th>
+                <th>total ayat</th>
+                <th>total surat</th>
+              </thead>
+              <tbody>
+                {% for e in lembaga %}
+                <tr>
+                  <td>{{ e.lembaga }}</td>
+                  <td>{{ e.jumlah_kontributor }}</td>
+                  <td>{{ e.jumlah_ayat }}</td>
+                  <td>{{ e.jumlah_surat }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+// get data
+var kelompok_usia_laki = {{ kelompok_usia_laki | safe }}
+var kelompok_usia_perempuan = {{ kelompok_usia_perempuan | safe }}
+var timeseries_data = {{ timeseries | safe }}
+
+// draw charts
+console.log({{ recorded_juz }})
+$(document).ready(function() {
+  var config_gender = {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: [{{ gender.P }}, {{ gender.L }}],
+        backgroundColor: ['#FFBF00', '#6495ED'],
+      }],
+      labels: ['Perempuan', 'Laki-laki']
+    },
+    options: {
+      responsive: true,
+      legend: {
+        position: 'top',
+      },
+      // title: {
+      //  display: true,
+      //  text: 'Chart.js Doughnut Chart'
+      // },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  };
+
+  var config_juzz = {
+    type: 'bar',
+    data: {
+      datasets: [{
+        data: {{ recorded_juz }},
+        backgroundColor: 'rgba(64, 224, 208, 0.7)',
+        borderColor: 'rgba(64, 224, 208)',
+        borderWidth: 2,
+      }],
+      labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+    },
+    options: {
+      responsive: true,
+      legend: {
+        display: false,
+      },
+      title: {
+       display: true,
+       text: 'Jumlah Ayat Per Juz'
+      },
+      animation: {
+        animateScale: true,
+      }
+    }
+  };
+
+  var config_usia = {
+    type: 'bar',
+    data: {
+      datasets: [{
+        label: 'Perempuan',
+        backgroundColor: '#FFBF00',
+        data: kelompok_usia_perempuan
+      }, {
+        label: 'Laki-laki',
+        backgroundColor: '#6495ED',
+        data: kelompok_usia_laki
+      }],
+      labels: ['7-12', '13-18', '19-25', '26-35', '36-45', '46-55', '56+'],
+    },
+    options: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+       display: true,
+       text: 'Kelompok Usia Kontributor'
+      },
+      animation: {
+        animateScale: true,
+      },
+      tooltips: {
+          mode: 'index',
+          intersect: false
+        },
+      responsive: true,
+      scales: {
+        xAxes: [{
+          stacked: true,
+        }],
+        yAxes: [{
+          stacked: true
+        }]
+      }
+    }
+  };
+
+  var config_timeseries = {
+      data: {
+        datasets: [{
+          label: 'Total Ayat Per Hari',
+          backgroundColor: 'rgba( 222, 49, 99, 0.7)',
+          borderColor: 'rgba( 222, 49, 99, 0.7)',
+          data: timeseries_data,
+          type: 'line',
+          pointRadius: 0,
+          fill: false,
+          lineTension: 0,
+          borderWidth: 2
+        }]
+      },
+      options: {
+        animation: {
+          duration: 0
+        },
+        scales: {
+          xAxes: [{
+            type: 'time',
+            distribution: 'series',
+            offset: true,
+            ticks: {
+              major: {
+                enabled: true,
+                fontStyle: 'bold'
+              },
+              source: 'data',
+              autoSkip: true,
+              autoSkipPadding: 75,
+              maxRotation: 0,
+              sampleSize: 100
+            },
+            // afterBuildTicks: function(scale, ticks) {
+            //   var majorUnit = scale._majorUnit;
+            //   var firstTick = ticks[0];
+            //   var i, ilen, val, tick, currMajor, lastMajor;
+
+            //   val = moment(ticks[0].value);
+            //   if ((majorUnit === 'minute' && val.second() === 0)
+            //       || (majorUnit === 'hour' && val.minute() === 0)
+            //       || (majorUnit === 'day' && val.hour() === 9)
+            //       || (majorUnit === 'month' && val.date() <= 3 && val.isoWeekday() === 1)
+            //       || (majorUnit === 'year' && val.month() === 0)) {
+            //     firstTick.major = true;
+            //   } else {
+            //     firstTick.major = false;
+            //   }
+            //   lastMajor = val.get(majorUnit);
+
+            //   for (i = 1, ilen = ticks.length; i < ilen; i++) {
+            //     tick = ticks[i];
+            //     val = moment(tick.value);
+            //     currMajor = val.get(majorUnit);
+            //     tick.major = currMajor !== lastMajor;
+            //     lastMajor = currMajor;
+            //   }
+            //   return ticks;
+            // }
+          }],
+          yAxes: [{
+            gridLines: {
+              drawBorder: false
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Jumlah Ayat'
+            }
+          }]
+        },
+        tooltips: {
+          intersect: false,
+          mode: 'index',
+          // callbacks: {
+          //   label: function(tooltipItem, myData) {
+          //     var label = myData.datasets[tooltipItem.datasetIndex].label || '';
+          //     if (label) {
+          //       label += ': ';
+          //     }
+          //     label += parseFloat(tooltipItem.value).toFixed(2);
+          //     return label;
+          //   }
+          // }
+        }
+      }
+    };
+
+  var ctx_gender = document.getElementById('chart-area-gender').getContext('2d');
+  var ctx_juzz = document.getElementById('chart-area-juz').getContext('2d');
+  var ctx_usia = document.getElementById('chart-area-usia').getContext('2d');
+  var ctx_timeseries = document.getElementById('chart-area-timeseries').getContext('2d');
+  window.gender = new Chart(ctx_gender, config_gender);
+  window.juzz = new Chart(ctx_juzz, config_juzz);
+  window.usia = new Chart(ctx_usia, config_usia);
+  window.timeseries = new Chart(ctx_timeseries, config_timeseries);
+});
+</script>
+{% endblock javascripts %}

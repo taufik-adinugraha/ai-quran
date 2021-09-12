@@ -5,7 +5,7 @@ Django webapp demo for quran recitation recognition using DeepSpeech. Model was 
 
 Dependencies
 ========================
-python 3.7
+python 3.7, webrtc
 
 ```
 pip install -r requirements.txt
